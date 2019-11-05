@@ -21,5 +21,5 @@ class Siswa(models.Model):
     program = models.CharField(max_length=30, choices=PROGRAM)
 
     def __str__(self):
-        return f'{self.nama}'
+        return self.nama
     
