@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import Siswa
-
+from .forms import SiswaForm
 
 # class Index(View):
 #     def get(self, request):
@@ -16,23 +16,19 @@ from .models import Siswa
 
 def Index(request):
     if request.POST:
-        form = request.POST
-        siswa = Siswa()
-        siswa.alamat = form['alamat']
-        siswa.nama = form['nama']
-        siswa.nomor_induk = form['nomor_induk']
-        siswa.kelamin = form['kelamin']
-        siswa.program = form['program']
-        siswa.save()
+        form = SiswaForm(request.POST or None)
+        if form.is_valid():
+            form.save(commit=True)
 
-        return redirect('/')
+            return redirect('/')
 
     else:
         template_name = "siswa/index.html"
-
+        form = SiswaForm(request.POST or None)
         data = {
             "title_web": "Web ITEC",
-            "siswa": Siswa.objects.all() #SELECT * FROM siswa
+            "siswa": Siswa.objects.all(),
+            "form": form
         }
         return render(request, template_name, data)
 
